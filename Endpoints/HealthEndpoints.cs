@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Asp.Versioning;
 using Asp.Versioning.Builder;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
@@ -27,6 +28,7 @@ public static class HealthEndpoints
 
         app.MapGroup("/api/v{version:apiVersion}")
             .WithApiVersionSet(versionSet)
+            .HasApiVersion(1)
             .MapGet("/health", GetHealth)
             .WithName("HealthCheckVersioned")
             .WithTags("Health")

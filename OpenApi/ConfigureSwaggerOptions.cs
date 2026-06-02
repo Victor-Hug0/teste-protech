@@ -20,7 +20,7 @@ public sealed class ConfigureSwaggerOptions(IApiVersionDescriptionProvider provi
                     Version = description.ApiVersion.ToString(),
                     Description = description.IsDeprecated
                         ? "Esta versão da API está obsoleta."
-                        : "API de tarefas com Clean Architecture."
+                        : "API de e-commerce com Clean Architecture."
                 });
         }
     }

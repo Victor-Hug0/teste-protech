@@ -11,51 +11,42 @@ public static class BuyerEndpoints
 {
     public static IEndpointRouteBuilder MapBuyerEndpoints(this IEndpointRouteBuilder app, ApiVersionSet versionSet)
     {
-        MapVersion(app, versionSet, 1, "v1");
-        MapVersion(app, versionSet, 2, "v2");
-        return app;
-    }
-
-    private static void MapVersion(
-        IEndpointRouteBuilder app,
-        ApiVersionSet versionSet,
-        int majorVersion,
-        string tagSuffix)
-    {
         var group = app.MapGroup("/api/v{version:apiVersion}/buyers")
             .WithApiVersionSet(versionSet)
-            .HasApiVersion(majorVersion)
-            .WithTags($"Buyers {tagSuffix}");
+            .HasApiVersion(1)
+            .WithTags("Buyers");
 
         group.MapGet("/", GetAll)
-            .WithName($"GetAllBuyers{tagSuffix}")
+            .WithName("GetAllBuyers")
             .WithSummary("Lista todos os compradores")
             .Produces<IReadOnlyList<BuyerDto>>(StatusCodes.Status200OK);
 
         group.MapGet("/{id:guid}", GetById)
-            .WithName($"GetBuyerById{tagSuffix}")
+            .WithName("GetBuyerById")
             .WithSummary("Obtém um comprador por id")
             .Produces<BuyerDto>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound);
 
         group.MapPost("/", Create)
-            .WithName($"CreateBuyer{tagSuffix}")
+            .WithName("CreateBuyer")
             .WithSummary("Cria um novo comprador")
             .Produces<BuyerDto>(StatusCodes.Status201Created)
             .ProducesValidationProblem();
 
         group.MapPut("/{id:guid}", Update)
-            .WithName($"UpdateBuyer{tagSuffix}")
+            .WithName("UpdateBuyer")
             .WithSummary("Atualiza um comprador")
             .Produces<BuyerDto>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
             .ProducesValidationProblem();
 
         group.MapDelete("/{id:guid}", Delete)
-            .WithName($"DeleteBuyer{tagSuffix}")
+            .WithName("DeleteBuyer")
             .WithSummary("Remove um comprador")
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status404NotFound);
+
+        return app;
     }
 
     private static async Task<IResult> GetAll(
