@@ -9,6 +9,7 @@
     <DefaultItemExcludes>$(DefaultItemExcludes);src/**</DefaultItemExcludes>
     <DefaultItemExcludes>$(DefaultItemExcludes);**/obj/**</DefaultItemExcludes>
     <DefaultItemExcludes>$(DefaultItemExcludes);**/bin/**</DefaultItemExcludes>
+    <DefaultItemExcludes>$(DefaultItemExcludes);tests/**</DefaultItemExcludes>    
   </PropertyGroup>
 
   <ItemGroup>
