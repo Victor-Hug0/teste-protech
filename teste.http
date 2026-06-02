@@ -8,38 +8,31 @@ Accept: application/json
 GET {{teste_HostAddress}}/api/v1/health
 Accept: application/json
 
-### Listar tarefas (v1)
-GET {{teste_HostAddress}}/api/v1/todos
+### Listar compradores (v1)
+GET {{teste_HostAddress}}/api/v1/buyers
 Accept: application/json
 
-### Listar tarefas (v2)
-GET {{teste_HostAddress}}/api/v2/todos
+### Obter comprador por id (v1 — substitua o GUID)
+GET {{teste_HostAddress}}/api/v1/buyers/00000000-0000-0000-0000-000000000000
 Accept: application/json
 
-### Criar tarefa (v1)
-POST {{teste_HostAddress}}/api/v1/todos
+### Criar comprador (v1)
+POST {{teste_HostAddress}}/api/v1/buyers
 Content-Type: application/json
 
 {
-  "title": "Estudar Clean Architecture",
-  "description": "Implementar camadas Domain, Application e Infrastructure"
+  "name": "Maria Silva",
+  "email": "maria@example.com"
 }
 
-### Obter por id (v1 — substitua o GUID)
-GET {{teste_HostAddress}}/api/v1/todos/00000000-0000-0000-0000-000000000000
-Accept: application/json
-
-### Atualizar tarefa (v1)
-PUT {{teste_HostAddress}}/api/v1/todos/00000000-0000-0000-0000-000000000000
+### Atualizar comprador (v1)
+PUT {{teste_HostAddress}}/api/v1/buyers/00000000-0000-0000-0000-000000000000
 Content-Type: application/json
 
 {
-  "title": "Estudar Clean Architecture (atualizado)",
-  "description": null
+  "name": "Maria Silva Santos",
+  "email": "maria.santos@example.com"
 }
 
-### Concluir tarefa (v1)
-PATCH {{teste_HostAddress}}/api/v1/todos/00000000-0000-0000-0000-000000000000/complete
-
-### Excluir tarefa (v1)
-DELETE {{teste_HostAddress}}/api/v1/todos/00000000-0000-0000-0000-000000000000
+### Excluir comprador (v1)
+DELETE {{teste_HostAddress}}/api/v1/buyers/00000000-0000-0000-0000-000000000000

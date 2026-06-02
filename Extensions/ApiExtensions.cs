@@ -75,7 +75,6 @@ public static class ApiExtensions
             .Build();
 
         app.MapHealthEndpoints(versionSet);
-        app.MapTodoEndpoints(versionSet);
         app.MapBuyerEndpoints(versionSet);
 
         return app;

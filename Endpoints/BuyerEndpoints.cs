@@ -1,9 +1,8 @@
+using System.ComponentModel.DataAnnotations;
+using Application.Buyers;
+using Application.DTOs;
 using Asp.Versioning;
 using Asp.Versioning.Builder;
-using Application.Features.Buyers.GetAll;
-using Application.DTOs;
-using Application.Features.Buyers.Create;
-using System.ComponentModel.DataAnnotations;
 using Teste.Contracts.Buyers;
 
 namespace Teste.Endpoints;
@@ -33,24 +32,52 @@ public static class BuyerEndpoints
             .WithSummary("Lista todos os compradores")
             .Produces<IReadOnlyList<BuyerDto>>(StatusCodes.Status200OK);
 
+        group.MapGet("/{id:guid}", GetById)
+            .WithName($"GetBuyerById{tagSuffix}")
+            .WithSummary("Obtém um comprador por id")
+            .Produces<BuyerDto>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status404NotFound);
+
         group.MapPost("/", Create)
             .WithName($"CreateBuyer{tagSuffix}")
             .WithSummary("Cria um novo comprador")
             .Produces<BuyerDto>(StatusCodes.Status201Created)
             .ProducesValidationProblem();
+
+        group.MapPut("/{id:guid}", Update)
+            .WithName($"UpdateBuyer{tagSuffix}")
+            .WithSummary("Atualiza um comprador")
+            .Produces<BuyerDto>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status404NotFound)
+            .ProducesValidationProblem();
+
+        group.MapDelete("/{id:guid}", Delete)
+            .WithName($"DeleteBuyer{tagSuffix}")
+            .WithSummary("Remove um comprador")
+            .Produces(StatusCodes.Status204NoContent)
+            .Produces(StatusCodes.Status404NotFound);
     }
 
     private static async Task<IResult> GetAll(
-        IGetAllBuyersHandler handler,
+        IBuyerService service,
         CancellationToken cancellationToken)
     {
-        var buyers = await handler.HandleAsync(cancellationToken);
+        var buyers = await service.GetAllAsync(cancellationToken);
         return Results.Ok(buyers);
     }
-    
+
+    private static async Task<IResult> GetById(
+        Guid id,
+        IBuyerService service,
+        CancellationToken cancellationToken)
+    {
+        var buyer = await service.GetByIdAsync(id, cancellationToken);
+        return Results.Ok(buyer);
+    }
+
     private static async Task<IResult> Create(
         CreateBuyerRequest request,
-        ICreateBuyerHandler handler,
+        IBuyerService service,
         HttpContext httpContext,
         CancellationToken cancellationToken)
     {
@@ -58,13 +85,34 @@ public static class BuyerEndpoints
         if (validationError is not null)
             return validationError;
 
-        var buyer = await handler.HandleAsync(
-            new CreateBuyerCommand(request.Name, request.Email),
-            cancellationToken);
+        var buyer = await service.CreateAsync(request.Name, request.Email, cancellationToken);
 
         var version = httpContext.GetRequestedApiVersion()?.ToString() ?? "1.0";
         var major = version.Split('.')[0];
         return Results.Created($"/api/v{major}/buyers/{buyer.Id}", buyer);
+    }
+
+    private static async Task<IResult> Update(
+        Guid id,
+        UpdateBuyerRequest request,
+        IBuyerService service,
+        CancellationToken cancellationToken)
+    {
+        var validationError = Validate(request);
+        if (validationError is not null)
+            return validationError;
+
+        var buyer = await service.UpdateAsync(id, request.Name, request.Email, cancellationToken);
+        return Results.Ok(buyer);
+    }
+
+    private static async Task<IResult> Delete(
+        Guid id,
+        IBuyerService service,
+        CancellationToken cancellationToken)
+    {
+        await service.DeleteAsync(id, cancellationToken);
+        return Results.NoContent();
     }
 
     private static IResult? Validate<T>(T instance) where T : class
