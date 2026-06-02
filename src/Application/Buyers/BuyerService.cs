@@ -38,36 +38,6 @@ public sealed class BuyerService(IBuyerRepository buyers) : IBuyerService
         return buyer.ToDto();
     }
 
-    public async Task<BuyerDto> UpdateAsync(
-        Guid id,
-        string name,
-        string email,
-        CancellationToken cancellationToken = default)
-    {
-        var buyer = await buyers.GetByIdAsync(id, cancellationToken)
-            ?? throw new NotFoundException($"Comprador com id '{id}' não encontrado.");
-
-        await EnsureEmailIsAvailableAsync(email, excludeBuyerId: id, cancellationToken);
-
-        buyer.Update(name, email);
-        buyers.Update(buyer);
-        await buyers.SaveChangesAsync(cancellationToken);
-
-        return buyer.ToDto();
-    }
-
-    public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
-    {
-        var buyer = await buyers.GetByIdAsync(id, cancellationToken)
-            ?? throw new NotFoundException($"Comprador com id '{id}' não encontrado.");
-
-        if (buyer.Orders.Count > 0)
-            throw new DomainException("Não é possível excluir um comprador que possui pedidos.");
-
-        buyers.Remove(buyer);
-        await buyers.SaveChangesAsync(cancellationToken);
-    }
-
     private async Task EnsureEmailIsAvailableAsync(
         string email,
         Guid? excludeBuyerId,

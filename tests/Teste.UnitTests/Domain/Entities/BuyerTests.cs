@@ -71,27 +71,4 @@ public sealed class BuyerTests
         act.Should().Throw<DomainException>()
             .WithMessage($"O e-mail deve ter no máximo {Buyer.EmailMaxLength} caracteres.");
     }
-
-    [Fact]
-    public void Update_WithValidData_ShouldUpdateProperties()
-    {
-        var buyer = Buyer.Create("Maria Silva", "maria@example.com");
-
-        buyer.Update("  João Santos  ", "  joao@example.com  ");
-
-        buyer.Name.Should().Be("João Santos");
-        buyer.Email.Should().Be("joao@example.com");
-    }
-
-    [Fact]
-    public void Update_WithInvalidName_ShouldThrowWithoutChangingEmail()
-    {
-        var buyer = Buyer.Create("Maria Silva", "maria@example.com");
-
-        var act = () => buyer.Update("ab", "maria@example.com");
-
-        act.Should().Throw<DomainException>();
-        buyer.Name.Should().Be("Maria Silva");
-        buyer.Email.Should().Be("maria@example.com");
-    }
 }

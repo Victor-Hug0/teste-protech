@@ -11,7 +11,5 @@ public interface IBuyerRepository
         Guid? excludeBuyerId = null,
         CancellationToken cancellationToken = default);
     Task AddAsync(Buyer buyer, CancellationToken cancellationToken = default);
-    void Update(Buyer buyer);
-    void Remove(Buyer buyer);
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

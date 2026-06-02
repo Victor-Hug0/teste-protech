@@ -28,12 +28,6 @@ public sealed class Buyer : Entity
     public static Buyer Create(string name, string email) =>
         new(Guid.NewGuid(), ValidateName(name), ValidateEmail(email), DateTime.UtcNow);
 
-    public void Update(string name, string email)
-    {
-        Name = ValidateName(name);
-        Email = ValidateEmail(email);
-    }
-
     private static string ValidateName(string name)
     {
         if (string.IsNullOrWhiteSpace(name))

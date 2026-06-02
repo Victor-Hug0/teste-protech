@@ -33,19 +33,6 @@ public static class BuyerEndpoints
             .Produces<BuyerDto>(StatusCodes.Status201Created)
             .ProducesValidationProblem();
 
-        group.MapPut("/{id:guid}", Update)
-            .WithName("UpdateBuyer")
-            .WithSummary("Atualiza um comprador")
-            .Produces<BuyerDto>(StatusCodes.Status200OK)
-            .Produces(StatusCodes.Status404NotFound)
-            .ProducesValidationProblem();
-
-        group.MapDelete("/{id:guid}", Delete)
-            .WithName("DeleteBuyer")
-            .WithSummary("Remove um comprador")
-            .Produces(StatusCodes.Status204NoContent)
-            .Produces(StatusCodes.Status404NotFound);
-
         return app;
     }
 
@@ -81,29 +68,6 @@ public static class BuyerEndpoints
         var version = httpContext.GetRequestedApiVersion()?.ToString() ?? "1.0";
         var major = version.Split('.')[0];
         return Results.Created($"/api/v{major}/buyers/{buyer.Id}", buyer);
-    }
-
-    private static async Task<IResult> Update(
-        Guid id,
-        UpdateBuyerRequest request,
-        IBuyerService service,
-        CancellationToken cancellationToken)
-    {
-        var validationError = Validate(request);
-        if (validationError is not null)
-            return validationError;
-
-        var buyer = await service.UpdateAsync(id, request.Name, request.Email, cancellationToken);
-        return Results.Ok(buyer);
-    }
-
-    private static async Task<IResult> Delete(
-        Guid id,
-        IBuyerService service,
-        CancellationToken cancellationToken)
-    {
-        await service.DeleteAsync(id, cancellationToken);
-        return Results.NoContent();
     }
 
     private static IResult? Validate<T>(T instance) where T : class

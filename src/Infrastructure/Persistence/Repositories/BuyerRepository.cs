@@ -35,10 +35,6 @@ public sealed class BuyerRepository(ApplicationDbContext context) : IBuyerReposi
     public async Task AddAsync(Buyer buyer, CancellationToken cancellationToken = default) =>
         await context.Buyers.AddAsync(buyer, cancellationToken);
 
-    public void Update(Buyer buyer) => context.Buyers.Update(buyer);
-
-    public void Remove(Buyer buyer) => context.Buyers.Remove(buyer);
-
     public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) =>
         context.SaveChangesAsync(cancellationToken);
 }
