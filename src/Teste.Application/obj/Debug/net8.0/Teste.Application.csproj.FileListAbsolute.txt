@@ -1,0 +1,15 @@
+/home/victorbarreto/projects/teste/src/Teste.Application/bin/Debug/net8.0/Teste.Application.deps.json
+/home/victorbarreto/projects/teste/src/Teste.Application/bin/Debug/net8.0/Teste.Application.dll
+/home/victorbarreto/projects/teste/src/Teste.Application/bin/Debug/net8.0/Teste.Application.pdb
+/home/victorbarreto/projects/teste/src/Teste.Application/bin/Debug/net8.0/Teste.Domain.dll
+/home/victorbarreto/projects/teste/src/Teste.Application/bin/Debug/net8.0/Teste.Domain.pdb
+/home/victorbarreto/projects/teste/src/Teste.Application/obj/Debug/net8.0/Teste.Application.csproj.AssemblyReference.cache
+/home/victorbarreto/projects/teste/src/Teste.Application/obj/Debug/net8.0/Teste.Application.GeneratedMSBuildEditorConfig.editorconfig
+/home/victorbarreto/projects/teste/src/Teste.Application/obj/Debug/net8.0/Teste.Application.AssemblyInfoInputs.cache
+/home/victorbarreto/projects/teste/src/Teste.Application/obj/Debug/net8.0/Teste.Application.AssemblyInfo.cs
+/home/victorbarreto/projects/teste/src/Teste.Application/obj/Debug/net8.0/Teste.Application.csproj.CoreCompileInputs.cache
+/home/victorbarreto/projects/teste/src/Teste.Application/obj/Debug/net8.0/Teste.Application.csproj.CopyComplete
+/home/victorbarreto/projects/teste/src/Teste.Application/obj/Debug/net8.0/Teste.Application.dll
+/home/victorbarreto/projects/teste/src/Teste.Application/obj/Debug/net8.0/refint/Teste.Application.dll
+/home/victorbarreto/projects/teste/src/Teste.Application/obj/Debug/net8.0/Teste.Application.pdb
+/home/victorbarreto/projects/teste/src/Teste.Application/obj/Debug/net8.0/ref/Teste.Application.dll

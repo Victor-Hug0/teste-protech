@@ -1,0 +1,11 @@
+/home/victorbarreto/projects/teste/src/Teste.Domain/bin/Debug/net8.0/Teste.Domain.deps.json
+/home/victorbarreto/projects/teste/src/Teste.Domain/bin/Debug/net8.0/Teste.Domain.dll
+/home/victorbarreto/projects/teste/src/Teste.Domain/bin/Debug/net8.0/Teste.Domain.pdb
+/home/victorbarreto/projects/teste/src/Teste.Domain/obj/Debug/net8.0/Teste.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/home/victorbarreto/projects/teste/src/Teste.Domain/obj/Debug/net8.0/Teste.Domain.AssemblyInfoInputs.cache
+/home/victorbarreto/projects/teste/src/Teste.Domain/obj/Debug/net8.0/Teste.Domain.AssemblyInfo.cs
+/home/victorbarreto/projects/teste/src/Teste.Domain/obj/Debug/net8.0/Teste.Domain.csproj.CoreCompileInputs.cache
+/home/victorbarreto/projects/teste/src/Teste.Domain/obj/Debug/net8.0/Teste.Domain.dll
+/home/victorbarreto/projects/teste/src/Teste.Domain/obj/Debug/net8.0/refint/Teste.Domain.dll
+/home/victorbarreto/projects/teste/src/Teste.Domain/obj/Debug/net8.0/Teste.Domain.pdb
+/home/victorbarreto/projects/teste/src/Teste.Domain/obj/Debug/net8.0/ref/Teste.Domain.dll

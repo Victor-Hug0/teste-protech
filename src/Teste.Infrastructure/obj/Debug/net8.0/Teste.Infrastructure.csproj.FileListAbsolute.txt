@@ -1,0 +1,17 @@
+/home/victorbarreto/projects/teste/src/Teste.Infrastructure/bin/Debug/net8.0/Teste.Infrastructure.deps.json
+/home/victorbarreto/projects/teste/src/Teste.Infrastructure/bin/Debug/net8.0/Teste.Infrastructure.dll
+/home/victorbarreto/projects/teste/src/Teste.Infrastructure/bin/Debug/net8.0/Teste.Infrastructure.pdb
+/home/victorbarreto/projects/teste/src/Teste.Infrastructure/bin/Debug/net8.0/Teste.Application.dll
+/home/victorbarreto/projects/teste/src/Teste.Infrastructure/bin/Debug/net8.0/Teste.Domain.dll
+/home/victorbarreto/projects/teste/src/Teste.Infrastructure/bin/Debug/net8.0/Teste.Application.pdb
+/home/victorbarreto/projects/teste/src/Teste.Infrastructure/bin/Debug/net8.0/Teste.Domain.pdb
+/home/victorbarreto/projects/teste/src/Teste.Infrastructure/obj/Debug/net8.0/Teste.Infrastructure.csproj.AssemblyReference.cache
+/home/victorbarreto/projects/teste/src/Teste.Infrastructure/obj/Debug/net8.0/Teste.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+/home/victorbarreto/projects/teste/src/Teste.Infrastructure/obj/Debug/net8.0/Teste.Infrastructure.AssemblyInfoInputs.cache
+/home/victorbarreto/projects/teste/src/Teste.Infrastructure/obj/Debug/net8.0/Teste.Infrastructure.AssemblyInfo.cs
+/home/victorbarreto/projects/teste/src/Teste.Infrastructure/obj/Debug/net8.0/Teste.Infrastructure.csproj.CoreCompileInputs.cache
+/home/victorbarreto/projects/teste/src/Teste.Infrastructure/obj/Debug/net8.0/Teste.Infrastructure.csproj.CopyComplete
+/home/victorbarreto/projects/teste/src/Teste.Infrastructure/obj/Debug/net8.0/Teste.Infrastructure.dll
+/home/victorbarreto/projects/teste/src/Teste.Infrastructure/obj/Debug/net8.0/refint/Teste.Infrastructure.dll
+/home/victorbarreto/projects/teste/src/Teste.Infrastructure/obj/Debug/net8.0/Teste.Infrastructure.pdb
+/home/victorbarreto/projects/teste/src/Teste.Infrastructure/obj/Debug/net8.0/ref/Teste.Infrastructure.dll

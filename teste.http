@@ -1,0 +1,45 @@
+@teste_HostAddress = http://localhost:5004
+
+### Health check
+GET {{teste_HostAddress}}/health
+Accept: application/json
+
+### Health check versionado (v1)
+GET {{teste_HostAddress}}/api/v1/health
+Accept: application/json
+
+### Listar tarefas (v1)
+GET {{teste_HostAddress}}/api/v1/todos
+Accept: application/json
+
+### Listar tarefas (v2)
+GET {{teste_HostAddress}}/api/v2/todos
+Accept: application/json
+
+### Criar tarefa (v1)
+POST {{teste_HostAddress}}/api/v1/todos
+Content-Type: application/json
+
+{
+  "title": "Estudar Clean Architecture",
+  "description": "Implementar camadas Domain, Application e Infrastructure"
+}
+
+### Obter por id (v1 — substitua o GUID)
+GET {{teste_HostAddress}}/api/v1/todos/00000000-0000-0000-0000-000000000000
+Accept: application/json
+
+### Atualizar tarefa (v1)
+PUT {{teste_HostAddress}}/api/v1/todos/00000000-0000-0000-0000-000000000000
+Content-Type: application/json
+
+{
+  "title": "Estudar Clean Architecture (atualizado)",
+  "description": null
+}
+
+### Concluir tarefa (v1)
+PATCH {{teste_HostAddress}}/api/v1/todos/00000000-0000-0000-0000-000000000000/complete
+
+### Excluir tarefa (v1)
+DELETE {{teste_HostAddress}}/api/v1/todos/00000000-0000-0000-0000-000000000000

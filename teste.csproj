@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Teste</RootNamespace>
+    <!-- Projeto na raiz: evita compilar src/ e obj/ das bibliotecas referenciadas -->
+    <DefaultItemExcludes>$(DefaultItemExcludes);src/**</DefaultItemExcludes>
+    <DefaultItemExcludes>$(DefaultItemExcludes);**/obj/**</DefaultItemExcludes>
+    <DefaultItemExcludes>$(DefaultItemExcludes);**/bin/**</DefaultItemExcludes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Asp.Versioning.Http" Version="8.1.0" />
+    <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.26" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.26">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="8.0.26" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="src\Teste.Application\Teste.Application.csproj" />
+    <ProjectReference Include="src\Teste.Infrastructure\Teste.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
