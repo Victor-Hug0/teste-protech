@@ -16,6 +16,9 @@ public sealed class OrderItemConfiguration : IEntityTypeConfiguration<OrderItem>
 
         builder.HasKey(i => i.Id);
 
+        builder.Property(i => i.Id)
+            .ValueGeneratedOnAdd();
+
         builder.Property(i => i.UnitPrice)
             .HasColumnType("decimal(10,2)")
             .IsRequired();

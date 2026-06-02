@@ -2,11 +2,11 @@ using Domain.Common;
 
 namespace Domain.Entities;
 
-public sealed class Category : Entity
+public sealed class Category : LongEntity
 {
     public string Name { get; set; } = string.Empty;
     public string? Description { get; set; }
-    public Guid? ParentId { get; set; }
+    public long? ParentId { get; set; }
     public bool Active { get; set; } = true;
     public DateTime CreatedAt { get; set; }
 
