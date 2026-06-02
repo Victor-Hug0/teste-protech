@@ -1,7 +1,7 @@
 using System.Net;
 using System.Text.Json;
-using Teste.Application.Exceptions;
-using Teste.Domain.Exceptions;
+using Application.Exceptions;
+using Domain.Exceptions;
 
 namespace Teste.Middleware;
 

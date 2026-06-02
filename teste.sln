@@ -7,11 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "teste", "teste.csproj", "{9
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F7DFA431-C1F4-471B-B43B-21C05BACB556}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teste.Domain", "src\Teste.Domain\Teste.Domain.csproj", "{4AD19D52-E22B-49E4-BD63-4949E0D2A320}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "src\Domain\Domain.csproj", "{4AD19D52-E22B-49E4-BD63-4949E0D2A320}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teste.Application", "src\Teste.Application\Teste.Application.csproj", "{C92A83EB-4F07-4737-8614-A3291F097581}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "src\Application\Application.csproj", "{C92A83EB-4F07-4737-8614-A3291F097581}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teste.Infrastructure", "src\Teste.Infrastructure\Teste.Infrastructure.csproj", "{E8A42135-030D-440C-8D9A-91BB5F68C143}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "src\Infrastructure\Infrastructure.csproj", "{E8A42135-030D-440C-8D9A-91BB5F68C143}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

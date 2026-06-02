@@ -2,10 +2,10 @@ using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Teste.Application;
+using Application;
 using Teste.Endpoints;
-using Teste.Infrastructure;
-using Teste.Infrastructure.Persistence;
+using Infrastructure;
+using Infrastructure.Persistence;
 using Teste.Middleware;
 using Teste.OpenApi;
 

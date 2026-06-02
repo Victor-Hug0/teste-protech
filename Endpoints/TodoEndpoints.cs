@@ -1,13 +1,13 @@
 using System.ComponentModel.DataAnnotations;
 using Asp.Versioning;
 using Asp.Versioning.Builder;
-using Teste.Application.DTOs;
-using Teste.Application.Features.Todos.Complete;
-using Teste.Application.Features.Todos.Create;
-using Teste.Application.Features.Todos.Delete;
-using Teste.Application.Features.Todos.GetAll;
-using Teste.Application.Features.Todos.GetById;
-using Teste.Application.Features.Todos.Update;
+using Application.DTOs;
+using Application.Features.Todos.Complete;
+using Application.Features.Todos.Create;
+using Application.Features.Todos.Delete;
+using Application.Features.Todos.GetAll;
+using Application.Features.Todos.GetById;
+using Application.Features.Todos.Update;
 using Teste.Contracts.Todos;
 
 namespace Teste.Endpoints;

@@ -1,8 +1,8 @@
 using Asp.Versioning;
 using Asp.Versioning.Builder;
-using Teste.Application.Features.Buyers.GetAll;
-using Teste.Application.DTOs;
-using Teste.Application.Features.Buyers.Create;
+using Application.Features.Buyers.GetAll;
+using Application.DTOs;
+using Application.Features.Buyers.Create;
 using System.ComponentModel.DataAnnotations;
 using Teste.Contracts.Buyers;
 
