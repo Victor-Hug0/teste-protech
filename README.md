@@ -11,7 +11,7 @@ O projeto segue **Clean Architecture** (arquitetura em camadas com dependências
 | **Domain** | Entidades ricas (`Buyer`, `Product`, `Category`, `Order`), enums, exceções de negócio e códigos de erro padronizados |
 | **Application** | Casos de uso (serviços), DTOs, mappers e interfaces de repositório — orquestra o domínio sem depender de infraestrutura |
 | **Infrastructure** | EF Core, `ApplicationDbContext`, repositórios concretos, migrations e seed de dados |
-| **Apresentação** | Minimal APIs versionadas (`/api/v1/...`), contratos de request/response, middleware global de exceções e Swagger |
+| **Api** (`src/Api`) | Minimal APIs versionadas (`/api/v1/...`), contratos de request/response, middleware global de exceções e Swagger |
 
 **Padrões e decisões técnicas:**
 
@@ -95,7 +95,7 @@ docker compose up -d
 
 ```bash
 dotnet restore
-dotnet run --project teste.csproj
+dotnet run --project src/Api/Api.csproj
 ```
 
 Em Development, as migrações e o seed do banco são aplicados automaticamente na inicialização.
@@ -111,7 +111,7 @@ Em Development, as migrações e o seed do banco são aplicados automaticamente 
 Perfil HTTPS (opcional):
 
 ```bash
-dotnet run --project teste.csproj --launch-profile https
+dotnet run --project src/Api/Api.csproj --launch-profile https
 ```
 
 ## Testes
@@ -153,12 +153,19 @@ docker compose up -d sqlserver
 
 ```
 teste-protech/
-├── Program.cs              # Entry point da API
-├── Endpoints/              # Minimal APIs
-├── Contracts/              # Request/response da API
 ├── src/
+│   ├── Api/                # Host HTTP (Program, Endpoints, Contracts, Middleware)
 │   ├── Application/        # Casos de uso e serviços
 │   ├── Domain/             # Entidades e regras de domínio
 │   └── Infrastructure/     # EF Core, repositórios, migrations
-└── tests/Teste.UnitTests/  # Testes unitários
+└── tests/
+    └── UnitTests/          # Testes unitários (Domain + Application)
+```
+
+### EF Core (migrations)
+
+```bash
+dotnet ef migrations add NomeDaMigration \
+  --project src/Infrastructure/Infrastructure.csproj \
+  --startup-project src/Api/Api.csproj
 ```
