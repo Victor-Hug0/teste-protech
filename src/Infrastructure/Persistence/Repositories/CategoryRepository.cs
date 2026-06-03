@@ -38,6 +38,22 @@ public sealed class CategoryRepository(ApplicationDbContext context) : ICategory
     public async Task<bool> HasChildrenAsync(long id, CancellationToken cancellationToken = default) =>
         await context.Categories.AsNoTracking().AnyAsync(c => c.ParentId == id, cancellationToken);
 
+    public async Task<bool> HasProductsAsync(long id, CancellationToken cancellationToken = default) =>
+        await context.Categories.AsNoTracking()
+            .AnyAsync(c => c.Id == id && c.Products.Any(), cancellationToken);
+
+    public async Task<IReadOnlyList<Category>> GetByIdsForLinkAsync(
+        IReadOnlyList<long> ids,
+        CancellationToken cancellationToken = default)
+    {
+        if (ids.Count == 0)
+            return [];
+
+        return await context.Categories
+            .Where(c => ids.Contains(c.Id))
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task AddAsync(Category category, CancellationToken cancellationToken = default) =>
         await context.Categories.AddAsync(category, cancellationToken);
 

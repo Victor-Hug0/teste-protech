@@ -178,6 +178,7 @@ public sealed class CategoryServiceTests
         var category = Category.Create("Eletrônicos", null);
         _repository.GetByIdAsync(1, Arg.Any<CancellationToken>()).Returns(category);
         _repository.HasChildrenAsync(1, Arg.Any<CancellationToken>()).Returns(false);
+        _repository.HasProductsAsync(1, Arg.Any<CancellationToken>()).Returns(false);
 
         await _sut.DeleteAsync(1);
 
@@ -197,6 +198,20 @@ public sealed class CategoryServiceTests
         await act.Should().ThrowAsync<DomainException>()
             .WithMessage("Não é possível excluir uma categoria que possui subcategorias.");
         _repository.DidNotReceive().Remove(Arg.Any<Category>());
+    }
+
+    [Fact]
+    public async Task DeleteAsync_WhenCategoryHasProducts_ShouldThrowDomainException()
+    {
+        var category = Category.Create("Eletrônicos", null);
+        _repository.GetByIdAsync(1, Arg.Any<CancellationToken>()).Returns(category);
+        _repository.HasChildrenAsync(1, Arg.Any<CancellationToken>()).Returns(false);
+        _repository.HasProductsAsync(1, Arg.Any<CancellationToken>()).Returns(true);
+
+        var act = () => _sut.DeleteAsync(1);
+
+        await act.Should().ThrowAsync<DomainException>()
+            .WithMessage("Não é possível excluir uma categoria vinculada a produtos.");
     }
 
     [Fact]

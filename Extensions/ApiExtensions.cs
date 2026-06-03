@@ -78,6 +78,7 @@ public static class ApiExtensions
         app.MapHealthEndpoints(versionSet);
         app.MapBuyerEndpoints(versionSet);
         app.MapCategoryEndpoints(versionSet);
+        app.MapProductEndpoints(versionSet);
 
         return app;
     }

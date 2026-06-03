@@ -69,6 +69,9 @@ public sealed class CategoryService(ICategoryRepository categories) : ICategoryS
         if (category.Children.Count > 0 || await categories.HasChildrenAsync(id, cancellationToken))
             throw new DomainException("Não é possível excluir uma categoria que possui subcategorias.");
 
+        if (await categories.HasProductsAsync(id, cancellationToken))
+            throw new DomainException("Não é possível excluir uma categoria vinculada a produtos.");
+
         categories.Remove(category);
         await categories.SaveChangesAsync(cancellationToken);
     }

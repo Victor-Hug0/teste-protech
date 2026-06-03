@@ -66,3 +66,41 @@ Content-Type: application/json
 
 ### Excluir categoria (v1)
 DELETE {{teste_HostAddress}}/api/v1/categories/16
+
+### Listar produtos (v1)
+GET {{teste_HostAddress}}/api/v1/products
+Accept: application/json
+
+### Obter produto por id (v1)
+GET {{teste_HostAddress}}/api/v1/products/1
+Accept: application/json
+
+### Criar produto (v1)
+POST {{teste_HostAddress}}/api/v1/products
+Content-Type: application/json
+
+{
+  "name": "Notebook Pro 15",
+  "description": "Notebook com 16GB RAM",
+  "price": 4999.90,
+  "brand": "TechBrand",
+  "color": "Prata",
+  "categoryIds": [1]
+}
+
+### Atualizar produto (v1)
+PUT {{teste_HostAddress}}/api/v1/products/1
+Content-Type: application/json
+
+{
+  "name": "Notebook Pro 15",
+  "description": "Notebook com 32GB RAM",
+  "price": 5499.90,
+  "brand": "TechBrand",
+  "color": "Preto",
+  "active": true,
+  "categoryIds": [1, 2]
+}
+
+### Excluir produto (v1)
+DELETE {{teste_HostAddress}}/api/v1/products/1
