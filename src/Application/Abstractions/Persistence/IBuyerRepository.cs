@@ -6,6 +6,7 @@ public interface IBuyerRepository
 {
     Task<Buyer?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<IReadOnlyList<Buyer>> GetAllAsync(CancellationToken cancellationToken = default);
+    Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default);
     Task<bool> ExistsByEmailAsync(
         string email,
         Guid? excludeBuyerId = null,

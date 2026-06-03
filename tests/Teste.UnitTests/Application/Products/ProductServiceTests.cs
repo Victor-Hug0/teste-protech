@@ -171,7 +171,7 @@ public sealed class ProductServiceTests
     public async Task DeleteAsync_WhenProductIsUsedInOrders_ShouldThrowDomainException()
     {
         var product = Product.Create("Notebook", 1000m, "Marca", "Azul");
-        product.OrderItems.Add(new OrderItem { ProductId = 1, OrderId = Guid.NewGuid(), Quantity = 1, UnitPrice = 10m });
+        product.OrderItems.Add(OrderItem.Create(1, 1, 10m));
         _products.GetByIdAsync(1, Arg.Any<CancellationToken>()).Returns(product);
 
         var act = () => _sut.DeleteAsync(1);

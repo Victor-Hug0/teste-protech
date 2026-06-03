@@ -79,6 +79,7 @@ public static class ApiExtensions
         app.MapBuyerEndpoints(versionSet);
         app.MapCategoryEndpoints(versionSet);
         app.MapProductEndpoints(versionSet);
+        app.MapOrderEndpoints(versionSet);
 
         return app;
     }

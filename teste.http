@@ -16,6 +16,14 @@ Accept: application/json
 GET {{teste_HostAddress}}/api/v1/buyers/00000000-0000-0000-0000-000000000000
 Accept: application/json
 
+### Listar pedidos do comprador (v1)
+GET {{teste_HostAddress}}/api/v1/buyers/00000000-0000-0000-0000-000000000000/orders
+Accept: application/json
+
+### Listar pedidos do comprador com filtros (v1)
+GET {{teste_HostAddress}}/api/v1/buyers/00000000-0000-0000-0000-000000000000/orders?status=ENVIADO&page=1&pageSize=20
+Accept: application/json
+
 ### Criar comprador (v1)
 POST {{teste_HostAddress}}/api/v1/buyers
 Content-Type: application/json
@@ -104,3 +112,60 @@ Content-Type: application/json
 
 ### Excluir produto (v1)
 DELETE {{teste_HostAddress}}/api/v1/products/1
+
+### Listar pedidos (v1)
+GET {{teste_HostAddress}}/api/v1/orders
+Accept: application/json
+
+### Listar pedidos com filtros e paginação (v1)
+GET {{teste_HostAddress}}/api/v1/orders?status=INICIADO,PROCESSADO&createdFrom=2026-01-01&createdTo=2026-12-31&page=1&pageSize=10
+Accept: application/json
+
+### Obter pedido por id (v1 — substitua o GUID)
+GET {{teste_HostAddress}}/api/v1/orders/00000000-0000-0000-0000-000000000000
+Accept: application/json
+
+### Criar pedido (v1 — use buyerId e productId reais)
+POST {{teste_HostAddress}}/api/v1/orders
+Content-Type: application/json
+
+{
+  "buyerId": "00000000-0000-0000-0000-000000000000",
+  "items": [
+    { "productId": 1, "quantity": 2 }
+  ]
+}
+
+### Processar pedido (v1 — INICIADO → PROCESSADO)
+PUT {{teste_HostAddress}}/api/v1/orders/00000000-0000-0000-0000-000000000000
+Content-Type: application/json
+
+{
+  "status": "PROCESSADO"
+}
+
+### Enviar pedido (v1 — PROCESSADO → ENVIADO)
+PUT {{teste_HostAddress}}/api/v1/orders/00000000-0000-0000-0000-000000000000
+Content-Type: application/json
+
+{
+  "status": "ENVIADO"
+}
+
+### Alterar comprador/itens (v1 — apenas INICIADO)
+PATCH {{teste_HostAddress}}/api/v1/orders/00000000-0000-0000-0000-000000000000
+Content-Type: application/json
+
+{
+  "buyerId": "00000000-0000-0000-0000-000000000000",
+  "items": [
+    { "productId": 1, "quantity": 1 }
+  ]
+}
+
+### Cancelar pedido (v1)
+POST {{teste_HostAddress}}/api/v1/orders/00000000-0000-0000-0000-000000000000/cancel
+Accept: application/json
+
+### Excluir pedido (v1 — apenas INICIADO)
+DELETE {{teste_HostAddress}}/api/v1/orders/00000000-0000-0000-0000-000000000000

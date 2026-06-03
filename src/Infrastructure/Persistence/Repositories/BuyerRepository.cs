@@ -17,6 +17,9 @@ public sealed class BuyerRepository(ApplicationDbContext context) : IBuyerReposi
             .OrderBy(b => b.Name)
             .ToListAsync(cancellationToken);
 
+    public async Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default) =>
+        await context.Buyers.AsNoTracking().AnyAsync(b => b.Id == id, cancellationToken);
+
     public async Task<bool> ExistsByEmailAsync(
         string email,
         Guid? excludeBuyerId = null,

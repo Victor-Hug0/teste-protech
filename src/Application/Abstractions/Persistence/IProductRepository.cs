@@ -11,6 +11,9 @@ public interface IProductRepository
         long? excludeProductId = null,
         CancellationToken cancellationToken = default);
     Task<bool> IsUsedInOrdersAsync(long id, CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<Product>> GetByIdsForLinkAsync(
+        IReadOnlyList<long> ids,
+        CancellationToken cancellationToken = default);
     Task AddAsync(Product product, CancellationToken cancellationToken = default);
     void Update(Product product);
     void Remove(Product product);

@@ -1,5 +1,6 @@
 using Application.Buyers;
 using Application.Categories;
+using Application.Orders;
 using Application.Products;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,6 +13,7 @@ public static class DependencyInjection
         services.AddScoped<IBuyerService, BuyerService>();
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<IOrderService, OrderService>();
         return services;
     }
 }

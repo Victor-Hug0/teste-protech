@@ -1,9 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 using Application.Buyers;
 using Application.DTOs;
+using Application.Orders;
 using Asp.Versioning;
 using Asp.Versioning.Builder;
 using Teste.Contracts.Buyers;
+using Teste.Contracts.Orders;
 
 namespace Teste.Endpoints;
 
@@ -26,6 +28,13 @@ public static class BuyerEndpoints
             .WithSummary("Obtém um comprador por id")
             .Produces<BuyerDto>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound);
+
+        group.MapGet("/{id:guid}/orders", GetOrders)
+            .WithName("GetBuyerOrders")
+            .WithSummary("Lista os pedidos de um comprador")
+            .Produces<PagedResult<OrderDto>>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status404NotFound)
+            .ProducesValidationProblem();
 
         group.MapPost("/", Create)
             .WithName("CreateBuyer")
@@ -51,6 +60,34 @@ public static class BuyerEndpoints
     {
         var buyer = await service.GetByIdAsync(id, cancellationToken);
         return Results.Ok(buyer);
+    }
+
+    private static async Task<IResult> GetOrders(
+        Guid id,
+        [AsParameters] ListOrdersQueryParameters query,
+        IOrderService orderService,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            var filter = OrderListFilter.Create(
+                query.Status,
+                query.CreatedFrom,
+                query.CreatedTo,
+                query.Page,
+                query.PageSize,
+                buyerId: id);
+
+            var result = await orderService.ListAsync(filter, cancellationToken);
+            return Results.Ok(result);
+        }
+        catch (Domain.Exceptions.DomainException ex)
+        {
+            return Results.ValidationProblem(new Dictionary<string, string[]>
+            {
+                [""] = [ex.Message]
+            });
+        }
     }
 
     private static async Task<IResult> Create(

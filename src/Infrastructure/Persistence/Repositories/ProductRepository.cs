@@ -37,6 +37,18 @@ public sealed class ProductRepository(ApplicationDbContext context) : IProductRe
     public async Task<bool> IsUsedInOrdersAsync(long id, CancellationToken cancellationToken = default) =>
         await context.OrderItems.AsNoTracking().AnyAsync(i => i.ProductId == id, cancellationToken);
 
+    public async Task<IReadOnlyList<Product>> GetByIdsForLinkAsync(
+        IReadOnlyList<long> ids,
+        CancellationToken cancellationToken = default)
+    {
+        if (ids.Count == 0)
+            return [];
+
+        return await context.Products
+            .Where(p => ids.Contains(p.Id))
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task AddAsync(Product product, CancellationToken cancellationToken = default) =>
         await context.Products.AddAsync(product, cancellationToken);
 
