@@ -2,11 +2,12 @@ using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Serilog;
+using Serilog.Events;
 using Application;
 using Teste.Endpoints;
 using Infrastructure;
 using Infrastructure.Persistence;
-using Infrastructure.Persistence.Seed;
 using Teste.Middleware;
 using Teste.OpenApi;
 
@@ -64,9 +65,38 @@ public static class ApiExtensions
 
             using var scope = app.Services.CreateScope();
             var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            await db.Database.MigrateAsync();
-            await CategorySeeder.SeedAsync(db);
+            var logger = scope.ServiceProvider
+                .GetRequiredService<ILoggerFactory>()
+                .CreateLogger("DatabaseInitializer");
+
+            await DatabaseInitializer.MigrateAndSeedAsync(db, logger);
         }
+
+        app.UseSerilogRequestLogging(options =>
+        {
+            options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
+            {
+                diagnosticContext.Set("RequestHost", httpContext.Request.Host.Value);
+                diagnosticContext.Set("RequestScheme", httpContext.Request.Scheme);
+                diagnosticContext.Set("UserAgent", httpContext.Request.Headers.UserAgent.ToString());
+            };
+
+            options.GetLevel = (httpContext, elapsed, ex) =>
+            {
+                if (ex is not null || httpContext.Response.StatusCode >= 500)
+                    return LogEventLevel.Error;
+
+                if (httpContext.Response.StatusCode >= 400)
+                    return LogEventLevel.Warning;
+
+                var path = httpContext.Request.Path.Value ?? string.Empty;
+                if (path.StartsWith("/health", StringComparison.OrdinalIgnoreCase)
+                    || path.StartsWith("/swagger", StringComparison.OrdinalIgnoreCase))
+                    return LogEventLevel.Debug;
+
+                return LogEventLevel.Information;
+            };
+        });
 
         app.UseMiddleware<ExceptionHandlingMiddleware>();
 

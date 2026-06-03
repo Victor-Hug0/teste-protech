@@ -32,14 +32,26 @@ public sealed class ExceptionHandlingMiddleware(
             context.Request.Path.Value);
 
         if (statusCode == System.Net.HttpStatusCode.InternalServerError)
-            logger.LogError(exception, "Erro não tratado: {Code} - {Message}", response.Code, exception.Message);
+        {
+            logger.LogError(
+                exception,
+                "Unhandled error {ErrorCode} {StatusCode} {RequestMethod} {RequestPath}",
+                response.Code,
+                response.Status,
+                context.Request.Method,
+                context.Request.Path.Value);
+        }
         else
+        {
             logger.LogWarning(
                 exception,
-                "{Title} [{Code}]: {Message}",
-                response.Title,
+                "Business error {ErrorCode} {ErrorTitle} {StatusCode} {RequestMethod} {RequestPath}",
                 response.Code,
-                exception.Message);
+                response.Title,
+                response.Status,
+                context.Request.Method,
+                context.Request.Path.Value);
+        }
 
         context.Response.ContentType = "application/problem+json";
         context.Response.StatusCode = response.Status;

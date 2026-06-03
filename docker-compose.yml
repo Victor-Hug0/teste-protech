@@ -1,25 +1,50 @@
+# Desenvolvimento:
+#   docker compose up -d          # SQL Server + Seq
+#   docker compose up -d sqlserver  # só banco
+#   docker compose up -d seq        # só logs (UI: http://localhost:5341)
 services:
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: teste-sqlserver
+    platform: linux/amd64
     environment:
       ACCEPT_EULA: "Y"
       MSSQL_SA_PASSWORD: "${MSSQL_SA_PASSWORD:-YourStrong@Passw0rd}"
+      MSSQL_PID: "Developer"
     ports:
       - "1433:1433"
     volumes:
       - sqlserver_data:/var/opt/mssql
     healthcheck:
+      # Usa a variável do container ($$ → $ no shell), não substituição do compose
       test:
         [
           "CMD-SHELL",
-          "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -C -Q \"SELECT 1\" || exit 1",
+          "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -C -l 30 -Q \"SELECT 1\" || exit 1",
         ]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 30s
+      interval: 15s
+      timeout: 10s
+      retries: 20
+      start_period: 180s
     restart: unless-stopped
+
+  seq:
+    image: datalust/seq:latest
+    container_name: teste-seq
+    environment:
+      ACCEPT_EULA: "Y"
+      SEQ_FIRSTRUN_ADMINPASSWORD: "${SEQ_FIRSTRUN_ADMINPASSWORD:-YourStrong@Passw0rd}"
+    ports:
+      - "5341:80"
+    volumes:
+      - seq_data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "/seqsvr/Client/seqcli node health -s http://localhost || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 15s
 
 volumes:
   sqlserver_data:
+  seq_data:

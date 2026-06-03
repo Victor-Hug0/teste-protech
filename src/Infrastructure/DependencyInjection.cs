@@ -18,7 +18,11 @@ public static class DependencyInjection
                 "Connection string 'DefaultConnection' não configurada.");
 
         services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(connectionString));
+            options.UseSqlServer(connectionString, sql =>
+                sql.EnableRetryOnFailure(
+                    maxRetryCount: 5,
+                    maxRetryDelay: TimeSpan.FromSeconds(10),
+                    errorNumbersToAdd: null)));
 
         services.AddScoped<IBuyerRepository, BuyerRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();

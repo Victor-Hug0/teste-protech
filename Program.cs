@@ -1,11 +1,37 @@
+using Serilog;
+using Teste.Configuration;
 using Teste.Extensions;
 
-var builder = WebApplication.CreateBuilder(args);
+EnvConfiguration.LoadDotEnv();
 
-builder.Services.AddApiServices(builder.Configuration);
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
 
-var app = builder.Build();
+try
+{
+    var builder = WebApplication.CreateBuilder(args);
 
-await app.UseApiPipelineAsync();
+    builder.Host.UseSerilog((context, services, configuration) => configuration
+        .ReadFrom.Configuration(context.Configuration)
+        .ReadFrom.Services(services)
+        .Enrich.FromLogContext()
+        .Enrich.WithProperty("Application", "Teste.Api")
+        .Enrich.WithProperty("Environment", context.HostingEnvironment.EnvironmentName));
 
-app.Run();
+    builder.Services.AddApiServices(builder.Configuration);
+
+    var app = builder.Build();
+
+    await app.UseApiPipelineAsync();
+
+    app.Run();
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Aplicação encerrada inesperadamente");
+}
+finally
+{
+    await Log.CloseAndFlushAsync();
+}
