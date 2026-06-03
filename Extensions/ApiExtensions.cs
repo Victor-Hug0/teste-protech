@@ -6,6 +6,7 @@ using Application;
 using Teste.Endpoints;
 using Infrastructure;
 using Infrastructure.Persistence;
+using Infrastructure.Persistence.Seed;
 using Teste.Middleware;
 using Teste.OpenApi;
 
@@ -64,6 +65,7 @@ public static class ApiExtensions
             using var scope = app.Services.CreateScope();
             var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             await db.Database.MigrateAsync();
+            await CategorySeeder.SeedAsync(db);
         }
 
         app.UseMiddleware<ExceptionHandlingMiddleware>();
@@ -75,6 +77,7 @@ public static class ApiExtensions
 
         app.MapHealthEndpoints(versionSet);
         app.MapBuyerEndpoints(versionSet);
+        app.MapCategoryEndpoints(versionSet);
 
         return app;
     }

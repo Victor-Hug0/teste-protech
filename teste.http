@@ -36,3 +36,33 @@ Content-Type: application/json
 
 ### Excluir comprador (v1)
 DELETE {{teste_HostAddress}}/api/v1/buyers/00000000-0000-0000-0000-000000000000
+
+### Listar categorias (v1)
+GET {{teste_HostAddress}}/api/v1/categories
+Accept: application/json
+
+### Obter categoria por id (v1)
+GET {{teste_HostAddress}}/api/v1/categories/1
+Accept: application/json
+
+### Criar categoria (v1)
+POST {{teste_HostAddress}}/api/v1/categories
+Content-Type: application/json
+
+{
+  "name": "Outlet",
+  "description": "Produtos em promoção"
+}
+
+### Atualizar categoria (v1)
+PUT {{teste_HostAddress}}/api/v1/categories/1
+Content-Type: application/json
+
+{
+  "name": "Eletrônicos",
+  "description": "Departamento de eletrônicos",
+  "active": true
+}
+
+### Excluir categoria (v1)
+DELETE {{teste_HostAddress}}/api/v1/categories/16
