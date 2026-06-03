@@ -81,7 +81,7 @@ public sealed class BuyerServiceTests
 
         var act = () => _sut.CreateAsync("Maria Silva", "maria@example.com");
 
-        await act.Should().ThrowAsync<DomainException>()
+        await act.Should().ThrowAsync<ConflictException>()
             .WithMessage("Já existe um comprador com este e-mail.");
         await _repository.DidNotReceive().AddAsync(Arg.Any<Buyer>(), Arg.Any<CancellationToken>());
     }

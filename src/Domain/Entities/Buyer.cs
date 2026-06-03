@@ -31,15 +31,15 @@ public sealed class Buyer : Entity
     private static string ValidateName(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
-            throw new DomainException("O nome é obrigatório.");
+            throw new DomainException("O nome é obrigatório.", BusinessRuleCodes.Buyer.NameRequired);
 
         var trimmed = name.Trim();
 
         if (trimmed.Length < NameMinLength)
-            throw new DomainException($"O nome deve ter no mínimo {NameMinLength} caracteres.");
+            throw new DomainException($"O nome deve ter no mínimo {NameMinLength} caracteres.", BusinessRuleCodes.Buyer.NameTooShort);
 
         if (trimmed.Length > NameMaxLength)
-            throw new DomainException($"O nome deve ter no máximo {NameMaxLength} caracteres.");
+            throw new DomainException($"O nome deve ter no máximo {NameMaxLength} caracteres.", BusinessRuleCodes.Buyer.NameTooLong);
 
         return trimmed;
     }
@@ -47,15 +47,15 @@ public sealed class Buyer : Entity
     private static string ValidateEmail(string email)
     {
         if (string.IsNullOrWhiteSpace(email))
-            throw new DomainException("O e-mail é obrigatório.");
+            throw new DomainException("O e-mail é obrigatório.", BusinessRuleCodes.Buyer.EmailRequired);
 
         var trimmed = email.Trim();
 
         if (trimmed.Length > EmailMaxLength)
-            throw new DomainException($"O e-mail deve ter no máximo {EmailMaxLength} caracteres.");
+            throw new DomainException($"O e-mail deve ter no máximo {EmailMaxLength} caracteres.", BusinessRuleCodes.Buyer.EmailTooLong);
 
         if (!trimmed.Contains('@') || trimmed.StartsWith('@') || trimmed.EndsWith('@'))
-            throw new DomainException("O e-mail informado é inválido.");
+            throw new DomainException("O e-mail informado é inválido.", BusinessRuleCodes.Buyer.EmailInvalid);
 
         return trimmed;
     }

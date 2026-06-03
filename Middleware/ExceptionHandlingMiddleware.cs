@@ -1,4 +1,3 @@
-using System.Net;
 using System.Text.Json;
 using Application.Exceptions;
 using Domain.Exceptions;
@@ -28,30 +27,23 @@ public sealed class ExceptionHandlingMiddleware(
 
     private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-        var (statusCode, title) = exception switch
-        {
-            NotFoundException => (HttpStatusCode.NotFound, "Recurso não encontrado"),
-            DomainException => (HttpStatusCode.BadRequest, "Regra de negócio violada"),
-            _ => (HttpStatusCode.InternalServerError, "Erro interno do servidor")
-        };
+        var (statusCode, response) = ExceptionResponseMapper.Map(
+            exception,
+            context.Request.Path.Value);
 
-        if (statusCode == HttpStatusCode.InternalServerError)
-            logger.LogError(exception, "Erro não tratado: {Message}", exception.Message);
+        if (statusCode == System.Net.HttpStatusCode.InternalServerError)
+            logger.LogError(exception, "Erro não tratado: {Code} - {Message}", response.Code, exception.Message);
         else
-            logger.LogWarning(exception, "{Title}: {Message}", title, exception.Message);
+            logger.LogWarning(
+                exception,
+                "{Title} [{Code}]: {Message}",
+                response.Title,
+                response.Code,
+                exception.Message);
 
         context.Response.ContentType = "application/problem+json";
-        context.Response.StatusCode = (int)statusCode;
+        context.Response.StatusCode = response.Status;
 
-        var problem = new
-        {
-            type = $"https://httpstatuses.com/{(int)statusCode}",
-            title,
-            status = (int)statusCode,
-            detail = exception.Message,
-            instance = context.Request.Path.Value
-        };
-
-        await context.Response.WriteAsync(JsonSerializer.Serialize(problem, JsonOptions));
+        await context.Response.WriteAsync(JsonSerializer.Serialize(response, JsonOptions));
     }
 }

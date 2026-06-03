@@ -18,13 +18,13 @@ public sealed class OrderItem : LongEntity
     public static OrderItem Create(long productId, int quantity, decimal unitPrice)
     {
         if (productId <= 0)
-            throw new DomainException("O produto é obrigatório.");
+            throw new DomainException("O produto é obrigatório.", BusinessRuleCodes.Order.ItemProductRequired);
 
         if (quantity <= 0)
-            throw new DomainException("A quantidade deve ser maior que zero.");
+            throw new DomainException("A quantidade deve ser maior que zero.", BusinessRuleCodes.Order.ItemQuantityInvalid);
 
         if (unitPrice < 0)
-            throw new DomainException("O preço unitário não pode ser negativo.");
+            throw new DomainException("O preço unitário não pode ser negativo.", BusinessRuleCodes.Order.ItemPriceNegative);
 
         return new OrderItem
         {

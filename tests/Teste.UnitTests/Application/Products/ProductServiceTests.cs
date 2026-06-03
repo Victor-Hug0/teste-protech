@@ -111,7 +111,7 @@ public sealed class ProductServiceTests
 
         var act = () => _sut.CreateAsync("Notebook", 10m, "Marca", "Azul", null, DefaultCategoryIds);
 
-        await act.Should().ThrowAsync<DomainException>()
+        await act.Should().ThrowAsync<ConflictException>()
             .WithMessage("Já existe um produto com este nome.");
     }
 

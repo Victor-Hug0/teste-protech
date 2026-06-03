@@ -18,7 +18,9 @@ public sealed class OrderService(
         CancellationToken cancellationToken = default)
     {
         if (filter.BuyerId.HasValue && !await buyers.ExistsAsync(filter.BuyerId.Value, cancellationToken))
-            throw new NotFoundException($"Comprador com id '{filter.BuyerId}' não encontrado.");
+            throw new NotFoundException(
+                $"Comprador com id '{filter.BuyerId}' não encontrado.",
+                BusinessRuleCodes.Buyer.NotFound);
 
         var (items, totalCount) = await orders.ListAsync(filter, cancellationToken);
 
@@ -38,7 +40,9 @@ public sealed class OrderService(
     public async Task<OrderDto> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var order = await orders.GetByIdAsync(id, cancellationToken)
-            ?? throw new NotFoundException($"Pedido com id '{id}' não encontrado.");
+            ?? throw new NotFoundException(
+                $"Pedido com id '{id}' não encontrado.",
+                BusinessRuleCodes.Order.NotFound);
 
         return order.ToDto();
     }
@@ -65,7 +69,9 @@ public sealed class OrderService(
         CancellationToken cancellationToken = default)
     {
         var order = await orders.GetByIdAsync(id, cancellationToken)
-            ?? throw new NotFoundException($"Pedido com id '{id}' não encontrado.");
+            ?? throw new NotFoundException(
+                $"Pedido com id '{id}' não encontrado.",
+                BusinessRuleCodes.Order.NotFound);
 
         ApplyStatusTransition(order, status);
 
@@ -81,7 +87,9 @@ public sealed class OrderService(
         CancellationToken cancellationToken = default)
     {
         var order = await orders.GetByIdAsync(id, cancellationToken)
-            ?? throw new NotFoundException($"Pedido com id '{id}' não encontrado.");
+            ?? throw new NotFoundException(
+                $"Pedido com id '{id}' não encontrado.",
+                BusinessRuleCodes.Order.NotFound);
 
         await EnsureBuyerExistsAsync(buyerId, cancellationToken);
 
@@ -96,7 +104,9 @@ public sealed class OrderService(
     public async Task<OrderDto> CancelAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var order = await orders.GetByIdAsync(id, cancellationToken)
-            ?? throw new NotFoundException($"Pedido com id '{id}' não encontrado.");
+            ?? throw new NotFoundException(
+                $"Pedido com id '{id}' não encontrado.",
+                BusinessRuleCodes.Order.NotFound);
 
         order.Cancel();
         await orders.SaveChangesAsync(cancellationToken);
@@ -107,7 +117,9 @@ public sealed class OrderService(
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var order = await orders.GetByIdAsync(id, cancellationToken)
-            ?? throw new NotFoundException($"Pedido com id '{id}' não encontrado.");
+            ?? throw new NotFoundException(
+                $"Pedido com id '{id}' não encontrado.",
+                BusinessRuleCodes.Order.NotFound);
 
         order.EnsureCanDelete();
         orders.Remove(order);
@@ -128,7 +140,8 @@ public sealed class OrderService(
                 break;
             default:
                 throw new DomainException(
-                    $"Transição de status inválida. Use '{OrderStatus.Processado}' ou '{OrderStatus.Enviado}'.");
+                    $"Transição de status inválida. Use '{OrderStatus.Processado}' ou '{OrderStatus.Enviado}'.",
+                    BusinessRuleCodes.Order.InvalidStatusTransition);
         }
     }
 
@@ -137,17 +150,23 @@ public sealed class OrderService(
         CancellationToken cancellationToken)
     {
         if (lines.Count == 0)
-            throw new DomainException("O pedido deve conter pelo menos um produto.");
+            throw new DomainException(
+                "O pedido deve conter pelo menos um produto.",
+                BusinessRuleCodes.Order.ItemsRequired);
 
         var distinctProductIds = lines.Select(l => l.ProductId).Distinct().ToList();
 
         if (distinctProductIds.Count != lines.Count)
-            throw new DomainException("O pedido não pode conter o mesmo produto mais de uma vez.");
+            throw new DomainException(
+                "O pedido não pode conter o mesmo produto mais de uma vez.",
+                BusinessRuleCodes.Order.DuplicateProduct);
 
         var foundProducts = await products.GetByIdsForLinkAsync(distinctProductIds, cancellationToken);
 
         if (foundProducts.Count != distinctProductIds.Count)
-            throw new DomainException("Um ou mais produtos informados não existem.");
+            throw new DomainException(
+                "Um ou mais produtos informados não existem.",
+                BusinessRuleCodes.Order.ProductsNotFound);
 
         var productById = foundProducts.ToDictionary(p => p.Id);
 
@@ -157,7 +176,9 @@ public sealed class OrderService(
                 var product = productById[line.ProductId];
 
                 if (!product.Active)
-                    throw new DomainException($"O produto '{product.Name}' está inativo.");
+                    throw new DomainException(
+                        $"O produto '{product.Name}' está inativo.",
+                        BusinessRuleCodes.Product.Inactive);
 
                 return OrderItem.Create(line.ProductId, line.Quantity, product.Price);
             })
@@ -167,6 +188,8 @@ public sealed class OrderService(
     private async Task EnsureBuyerExistsAsync(Guid buyerId, CancellationToken cancellationToken)
     {
         if (!await buyers.ExistsAsync(buyerId, cancellationToken))
-            throw new DomainException("O comprador informado não existe.");
+            throw new DomainException(
+                "O comprador informado não existe.",
+                BusinessRuleCodes.Order.BuyerNotFound);
     }
 }

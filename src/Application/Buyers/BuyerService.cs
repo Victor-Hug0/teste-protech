@@ -18,7 +18,9 @@ public sealed class BuyerService(IBuyerRepository buyers) : IBuyerService
     public async Task<BuyerDto> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var buyer = await buyers.GetByIdAsync(id, cancellationToken)
-            ?? throw new NotFoundException($"Comprador com id '{id}' não encontrado.");
+            ?? throw new NotFoundException(
+                $"Comprador com id '{id}' não encontrado.",
+                BusinessRuleCodes.Buyer.NotFound);
 
         return buyer.ToDto();
     }
@@ -44,6 +46,8 @@ public sealed class BuyerService(IBuyerRepository buyers) : IBuyerService
         CancellationToken cancellationToken)
     {
         if (await buyers.ExistsByEmailAsync(email, excludeBuyerId, cancellationToken))
-            throw new DomainException("Já existe um comprador com este e-mail.");
+            throw new ConflictException(
+                "Já existe um comprador com este e-mail.",
+                BusinessRuleCodes.Buyer.EmailAlreadyExists);
     }
 }

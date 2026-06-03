@@ -68,25 +68,15 @@ public static class OrderEndpoints
         IOrderService service,
         CancellationToken cancellationToken)
     {
-        try
-        {
-            var filter = OrderListFilter.Create(
-                query.Status,
-                query.CreatedFrom,
-                query.CreatedTo,
-                query.Page,
-                query.PageSize);
+        var filter = OrderListFilter.Create(
+            query.Status,
+            query.CreatedFrom,
+            query.CreatedTo,
+            query.Page,
+            query.PageSize);
 
-            var result = await service.ListAsync(filter, cancellationToken);
-            return Results.Ok(result);
-        }
-        catch (Domain.Exceptions.DomainException ex)
-        {
-            return Results.ValidationProblem(new Dictionary<string, string[]>
-            {
-                [""] = [ex.Message]
-            });
-        }
+        var result = await service.ListAsync(filter, cancellationToken);
+        return Results.Ok(result);
     }
 
     private static async Task<IResult> GetById(

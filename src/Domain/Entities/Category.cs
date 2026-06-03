@@ -42,15 +42,15 @@ public sealed class Category : LongEntity
     private static string ValidateName(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
-            throw new DomainException("O nome da categoria é obrigatório.");
+            throw new DomainException("O nome da categoria é obrigatório.", BusinessRuleCodes.Category.NameRequired);
 
         var trimmed = name.Trim();
 
         if (trimmed.Length < NameMinLength)
-            throw new DomainException($"O nome deve ter no mínimo {NameMinLength} caracteres.");
+            throw new DomainException($"O nome deve ter no mínimo {NameMinLength} caracteres.", BusinessRuleCodes.Category.NameTooShort);
 
         if (trimmed.Length > NameMaxLength)
-            throw new DomainException($"O nome deve ter no máximo {NameMaxLength} caracteres.");
+            throw new DomainException($"O nome deve ter no máximo {NameMaxLength} caracteres.", BusinessRuleCodes.Category.NameTooLong);
 
         return trimmed;
     }
@@ -63,7 +63,7 @@ public sealed class Category : LongEntity
         var trimmed = description.Trim();
 
         if (trimmed.Length > DescriptionMaxLength)
-            throw new DomainException($"A descrição deve ter no máximo {DescriptionMaxLength} caracteres.");
+            throw new DomainException($"A descrição deve ter no máximo {DescriptionMaxLength} caracteres.", BusinessRuleCodes.Category.DescriptionTooLong);
 
         return trimmed;
     }

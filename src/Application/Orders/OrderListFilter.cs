@@ -28,7 +28,9 @@ public sealed record OrderListFilter
         var normalizedPageSize = pageSize <= 0 ? DefaultPageSize : Math.Min(pageSize, MaxPageSize);
 
         if (createdFrom.HasValue && createdTo.HasValue && createdFrom > createdTo)
-            throw new DomainException("'createdFrom' não pode ser maior que 'createdTo'.");
+            throw new DomainException(
+                "'createdFrom' não pode ser maior que 'createdTo'.",
+                BusinessRuleCodes.Order.InvalidDateRange);
 
         return new OrderListFilter
         {
@@ -56,7 +58,8 @@ public sealed record OrderListFilter
         {
             if (!OrderStatus.All.Contains(value))
                 throw new DomainException(
-                    $"Status '{value}' inválido. Valores permitidos: INICIADO, PROCESSADO, ENVIADO, CANCELADO.");
+                    $"Status '{value}' inválido. Valores permitidos: INICIADO, PROCESSADO, ENVIADO, CANCELADO.",
+                    BusinessRuleCodes.Order.InvalidStatusFilter);
         }
 
         return statuses;

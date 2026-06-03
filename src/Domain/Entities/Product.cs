@@ -68,15 +68,15 @@ public sealed class Product : LongEntity
     private static string ValidateName(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
-            throw new DomainException("O nome do produto é obrigatório.");
+            throw new DomainException("O nome do produto é obrigatório.", BusinessRuleCodes.Product.NameRequired);
 
         var trimmed = name.Trim();
 
         if (trimmed.Length < NameMinLength)
-            throw new DomainException($"O nome deve ter no mínimo {NameMinLength} caracteres.");
+            throw new DomainException($"O nome deve ter no mínimo {NameMinLength} caracteres.", BusinessRuleCodes.Product.NameTooShort);
 
         if (trimmed.Length > NameMaxLength)
-            throw new DomainException($"O nome deve ter no máximo {NameMaxLength} caracteres.");
+            throw new DomainException($"O nome deve ter no máximo {NameMaxLength} caracteres.", BusinessRuleCodes.Product.NameTooLong);
 
         return trimmed;
     }
@@ -84,12 +84,12 @@ public sealed class Product : LongEntity
     private static string ValidateBrand(string brand)
     {
         if (string.IsNullOrWhiteSpace(brand))
-            throw new DomainException("A marca é obrigatória.");
+            throw new DomainException("A marca é obrigatória.", BusinessRuleCodes.Product.BrandRequired);
 
         var trimmed = brand.Trim();
 
         if (trimmed.Length > BrandMaxLength)
-            throw new DomainException($"A marca deve ter no máximo {BrandMaxLength} caracteres.");
+            throw new DomainException($"A marca deve ter no máximo {BrandMaxLength} caracteres.", BusinessRuleCodes.Product.BrandTooLong);
 
         return trimmed;
     }
@@ -97,12 +97,12 @@ public sealed class Product : LongEntity
     private static string ValidateColor(string color)
     {
         if (string.IsNullOrWhiteSpace(color))
-            throw new DomainException("A cor é obrigatória.");
+            throw new DomainException("A cor é obrigatória.", BusinessRuleCodes.Product.ColorRequired);
 
         var trimmed = color.Trim();
 
         if (trimmed.Length > ColorMaxLength)
-            throw new DomainException($"A cor deve ter no máximo {ColorMaxLength} caracteres.");
+            throw new DomainException($"A cor deve ter no máximo {ColorMaxLength} caracteres.", BusinessRuleCodes.Product.ColorTooLong);
 
         return trimmed;
     }
@@ -110,7 +110,7 @@ public sealed class Product : LongEntity
     private static decimal ValidatePrice(decimal price)
     {
         if (price < 0)
-            throw new DomainException("O preço não pode ser negativo.");
+            throw new DomainException("O preço não pode ser negativo.", BusinessRuleCodes.Product.PriceNegative);
 
         return price;
     }
@@ -118,7 +118,7 @@ public sealed class Product : LongEntity
     private static void ValidateCategories(IReadOnlyCollection<Category> categories)
     {
         if (categories.Count == 0)
-            throw new DomainException("O produto deve pertencer a pelo menos uma categoria.");
+            throw new DomainException("O produto deve pertencer a pelo menos uma categoria.", BusinessRuleCodes.Product.CategoriesRequired);
     }
 
     private static string? NormalizeDescription(string? description)
@@ -129,7 +129,7 @@ public sealed class Product : LongEntity
         var trimmed = description.Trim();
 
         if (trimmed.Length > DescriptionMaxLength)
-            throw new DomainException($"A descrição deve ter no máximo {DescriptionMaxLength} caracteres.");
+            throw new DomainException($"A descrição deve ter no máximo {DescriptionMaxLength} caracteres.", BusinessRuleCodes.Product.DescriptionTooLong);
 
         return trimmed;
     }

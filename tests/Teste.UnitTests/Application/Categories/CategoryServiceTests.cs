@@ -78,7 +78,7 @@ public sealed class CategoryServiceTests
 
         var act = () => _sut.CreateAsync("Eletrônicos", null, null);
 
-        await act.Should().ThrowAsync<DomainException>()
+        await act.Should().ThrowAsync<ConflictException>()
             .WithMessage("Já existe uma categoria com este nome.");
         await _repository.DidNotReceive().AddAsync(Arg.Any<Category>(), Arg.Any<CancellationToken>());
     }
@@ -168,7 +168,7 @@ public sealed class CategoryServiceTests
 
         var act = () => _sut.UpdateAsync(1, "Moda", null, true, null);
 
-        await act.Should().ThrowAsync<DomainException>()
+        await act.Should().ThrowAsync<ConflictException>()
             .WithMessage("Já existe uma categoria com este nome.");
     }
 

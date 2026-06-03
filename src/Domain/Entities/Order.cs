@@ -19,7 +19,7 @@ public sealed class Order : Entity
     public static Order Create(Guid buyerId, IReadOnlyList<OrderItem> items)
     {
         if (buyerId == Guid.Empty)
-            throw new DomainException("O comprador é obrigatório.");
+            throw new DomainException("O comprador é obrigatório.", BusinessRuleCodes.Order.BuyerRequired);
 
         ValidateItems(items);
 
@@ -45,7 +45,7 @@ public sealed class Order : Entity
         EnsureCanUpdateDetails();
 
         if (buyerId == Guid.Empty)
-            throw new DomainException("O comprador é obrigatório.");
+            throw new DomainException("O comprador é obrigatório.", BusinessRuleCodes.Order.BuyerRequired);
 
         ValidateItems(items);
 
@@ -64,7 +64,7 @@ public sealed class Order : Entity
     public void Process()
     {
         if (Status != OrderStatus.Iniciado)
-            throw new DomainException("Apenas pedidos iniciados podem ser processados.");
+            throw new DomainException("Apenas pedidos iniciados podem ser processados.", BusinessRuleCodes.Order.CannotProcess);
 
         Status = OrderStatus.Processado;
         UpdatedAt = DateTime.UtcNow;
@@ -73,7 +73,7 @@ public sealed class Order : Entity
     public void Ship()
     {
         if (Status != OrderStatus.Processado)
-            throw new DomainException("Apenas pedidos processados podem ser enviados.");
+            throw new DomainException("Apenas pedidos processados podem ser enviados.", BusinessRuleCodes.Order.CannotShip);
 
         Status = OrderStatus.Enviado;
         UpdatedAt = DateTime.UtcNow;
@@ -82,7 +82,7 @@ public sealed class Order : Entity
     public void Cancel()
     {
         if (Status is not (OrderStatus.Iniciado or OrderStatus.Processado))
-            throw new DomainException("Apenas pedidos iniciados ou processados podem ser cancelados.");
+            throw new DomainException("Apenas pedidos iniciados ou processados podem ser cancelados.", BusinessRuleCodes.Order.CannotCancel);
 
         Status = OrderStatus.Cancelado;
         UpdatedAt = DateTime.UtcNow;
@@ -91,7 +91,7 @@ public sealed class Order : Entity
     public void EnsureCanDelete()
     {
         if (Status != OrderStatus.Iniciado)
-            throw new DomainException("Apenas pedidos iniciados podem ser excluídos.");
+            throw new DomainException("Apenas pedidos iniciados podem ser excluídos.", BusinessRuleCodes.Order.CannotDelete);
     }
 
     public decimal Total => Items.Sum(i => i.LineTotal);
@@ -99,15 +99,15 @@ public sealed class Order : Entity
     private static void ValidateItems(IReadOnlyList<OrderItem> items)
     {
         if (items.Count == 0)
-            throw new DomainException("O pedido deve conter pelo menos um produto.");
+            throw new DomainException("O pedido deve conter pelo menos um produto.", BusinessRuleCodes.Order.ItemsRequired);
 
         if (items.GroupBy(i => i.ProductId).Any(g => g.Count() > 1))
-            throw new DomainException("O pedido não pode conter o mesmo produto mais de uma vez.");
+            throw new DomainException("O pedido não pode conter o mesmo produto mais de uma vez.", BusinessRuleCodes.Order.DuplicateProduct);
     }
 
     private void EnsureCanUpdateDetails()
     {
         if (Status != OrderStatus.Iniciado)
-            throw new DomainException("Apenas pedidos não processados podem ser alterados.");
+            throw new DomainException("Apenas pedidos não processados podem ser alterados.", BusinessRuleCodes.Order.CannotUpdate);
     }
 }

@@ -68,26 +68,16 @@ public static class BuyerEndpoints
         IOrderService orderService,
         CancellationToken cancellationToken)
     {
-        try
-        {
-            var filter = OrderListFilter.Create(
-                query.Status,
-                query.CreatedFrom,
-                query.CreatedTo,
-                query.Page,
-                query.PageSize,
-                buyerId: id);
+        var filter = OrderListFilter.Create(
+            query.Status,
+            query.CreatedFrom,
+            query.CreatedTo,
+            query.Page,
+            query.PageSize,
+            buyerId: id);
 
-            var result = await orderService.ListAsync(filter, cancellationToken);
-            return Results.Ok(result);
-        }
-        catch (Domain.Exceptions.DomainException ex)
-        {
-            return Results.ValidationProblem(new Dictionary<string, string[]>
-            {
-                [""] = [ex.Message]
-            });
-        }
+        var result = await orderService.ListAsync(filter, cancellationToken);
+        return Results.Ok(result);
     }
 
     private static async Task<IResult> Create(

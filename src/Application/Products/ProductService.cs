@@ -20,7 +20,9 @@ public sealed class ProductService(
     public async Task<ProductDto> GetByIdAsync(long id, CancellationToken cancellationToken = default)
     {
         var product = await products.GetByIdAsync(id, cancellationToken)
-            ?? throw new NotFoundException($"Produto com id '{id}' não encontrado.");
+            ?? throw new NotFoundException(
+                $"Produto com id '{id}' não encontrado.",
+                BusinessRuleCodes.Product.NotFound);
 
         return product.ToDto();
     }
@@ -58,7 +60,9 @@ public sealed class ProductService(
         CancellationToken cancellationToken = default)
     {
         var product = await products.GetByIdAsync(id, cancellationToken)
-            ?? throw new NotFoundException($"Produto com id '{id}' não encontrado.");
+            ?? throw new NotFoundException(
+                $"Produto com id '{id}' não encontrado.",
+                BusinessRuleCodes.Product.NotFound);
 
         await EnsureNameIsAvailableAsync(name, excludeProductId: id, cancellationToken);
 
@@ -75,10 +79,14 @@ public sealed class ProductService(
     public async Task DeleteAsync(long id, CancellationToken cancellationToken = default)
     {
         var product = await products.GetByIdAsync(id, cancellationToken)
-            ?? throw new NotFoundException($"Produto com id '{id}' não encontrado.");
+            ?? throw new NotFoundException(
+                $"Produto com id '{id}' não encontrado.",
+                BusinessRuleCodes.Product.NotFound);
 
         if (product.OrderItems.Count > 0 || await products.IsUsedInOrdersAsync(id, cancellationToken))
-            throw new DomainException("Não é possível excluir um produto vinculado a pedidos.");
+            throw new DomainException(
+                "Não é possível excluir um produto vinculado a pedidos.",
+                BusinessRuleCodes.Product.InUseByOrders);
 
         products.Remove(product);
         await products.SaveChangesAsync(cancellationToken);
@@ -91,12 +99,16 @@ public sealed class ProductService(
         var distinctIds = categoryIds.Distinct().ToList();
 
         if (distinctIds.Count == 0)
-            throw new DomainException("O produto deve pertencer a pelo menos uma categoria.");
+            throw new DomainException(
+                "O produto deve pertencer a pelo menos uma categoria.",
+                BusinessRuleCodes.Product.CategoriesRequired);
 
         var found = await categories.GetByIdsForLinkAsync(distinctIds, cancellationToken);
 
         if (found.Count != distinctIds.Count)
-            throw new DomainException("Uma ou mais categorias informadas não existem.");
+            throw new DomainException(
+                "Uma ou mais categorias informadas não existem.",
+                BusinessRuleCodes.Product.CategoriesNotFound);
 
         return found;
     }
@@ -107,6 +119,8 @@ public sealed class ProductService(
         CancellationToken cancellationToken)
     {
         if (await products.ExistsByNameAsync(name, excludeProductId, cancellationToken))
-            throw new DomainException("Já existe um produto com este nome.");
+            throw new ConflictException(
+                "Já existe um produto com este nome.",
+                BusinessRuleCodes.Product.NameAlreadyExists);
     }
 }

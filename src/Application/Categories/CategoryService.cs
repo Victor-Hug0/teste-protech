@@ -18,7 +18,9 @@ public sealed class CategoryService(ICategoryRepository categories) : ICategoryS
     public async Task<CategoryDto> GetByIdAsync(long id, CancellationToken cancellationToken = default)
     {
         var category = await categories.GetByIdAsync(id, cancellationToken)
-            ?? throw new NotFoundException($"Categoria com id '{id}' não encontrada.");
+            ?? throw new NotFoundException(
+                $"Categoria com id '{id}' não encontrada.",
+                BusinessRuleCodes.Category.NotFound);
 
         return category.ToDto();
     }
@@ -49,7 +51,9 @@ public sealed class CategoryService(ICategoryRepository categories) : ICategoryS
         CancellationToken cancellationToken = default)
     {
         var category = await categories.GetByIdAsync(id, cancellationToken)
-            ?? throw new NotFoundException($"Categoria com id '{id}' não encontrada.");
+            ?? throw new NotFoundException(
+                $"Categoria com id '{id}' não encontrada.",
+                BusinessRuleCodes.Category.NotFound);
 
         await EnsureNameIsAvailableAsync(name, excludeCategoryId: id, cancellationToken);
         await ValidateParentAsync(parentId, categoryId: id, cancellationToken);
@@ -64,13 +68,19 @@ public sealed class CategoryService(ICategoryRepository categories) : ICategoryS
     public async Task DeleteAsync(long id, CancellationToken cancellationToken = default)
     {
         var category = await categories.GetByIdAsync(id, cancellationToken)
-            ?? throw new NotFoundException($"Categoria com id '{id}' não encontrada.");
+            ?? throw new NotFoundException(
+                $"Categoria com id '{id}' não encontrada.",
+                BusinessRuleCodes.Category.NotFound);
 
         if (category.Children.Count > 0 || await categories.HasChildrenAsync(id, cancellationToken))
-            throw new DomainException("Não é possível excluir uma categoria que possui subcategorias.");
+            throw new DomainException(
+                "Não é possível excluir uma categoria que possui subcategorias.",
+                BusinessRuleCodes.Category.HasChildren);
 
         if (await categories.HasProductsAsync(id, cancellationToken))
-            throw new DomainException("Não é possível excluir uma categoria vinculada a produtos.");
+            throw new DomainException(
+                "Não é possível excluir uma categoria vinculada a produtos.",
+                BusinessRuleCodes.Category.HasProducts);
 
         categories.Remove(category);
         await categories.SaveChangesAsync(cancellationToken);
@@ -82,7 +92,9 @@ public sealed class CategoryService(ICategoryRepository categories) : ICategoryS
         CancellationToken cancellationToken)
     {
         if (await categories.ExistsByNameAsync(name, excludeCategoryId, cancellationToken))
-            throw new DomainException("Já existe uma categoria com este nome.");
+            throw new ConflictException(
+                "Já existe uma categoria com este nome.",
+                BusinessRuleCodes.Category.NameAlreadyExists);
     }
 
     private async Task ValidateParentAsync(
@@ -94,9 +106,13 @@ public sealed class CategoryService(ICategoryRepository categories) : ICategoryS
             return;
 
         if (categoryId.HasValue && parentId.Value == categoryId.Value)
-            throw new DomainException("Uma categoria não pode ser pai dela mesma.");
+            throw new DomainException(
+                "Uma categoria não pode ser pai dela mesma.",
+                BusinessRuleCodes.Category.CannotBeOwnParent);
 
         if (!await categories.ExistsAsync(parentId.Value, cancellationToken))
-            throw new DomainException("A categoria pai informada não existe.");
+            throw new DomainException(
+                "A categoria pai informada não existe.",
+                BusinessRuleCodes.Category.ParentNotFound);
     }
 }

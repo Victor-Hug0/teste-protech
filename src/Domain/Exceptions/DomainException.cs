@@ -1,8 +1,12 @@
 namespace Domain.Exceptions;
 
-public sealed class DomainException : Exception
+public class DomainException : Exception
 {
-    public DomainException(string message) : base(message)
+    public string Code { get; }
+
+    public DomainException(string message, string code = BusinessRuleCodes.Common.BusinessRuleViolation)
+        : base(message)
     {
+        Code = code;
     }
 }
